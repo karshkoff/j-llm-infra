@@ -1,11 +1,10 @@
 name: 'tf-deploy-dev'
-run-name: Run ${{ github.run_id }}number
+run-name: "Run_id: ${{ github.run_id }}"
 
 env:
-  TF_CLI_ARGS: "-no-color -input=false -var-file=dev.tfvars"
-  TF_CLI_ARGS_init: "-backend-config=dev_backend.tfvars"
-  TF_CLI_ARGS_apply: "-auto-approve"
+  TF_CLI_ARGS: "-no-color"
   AWS_REGION: "us-east-1"
+  ENV: "dev"
 
 on:
   push:
@@ -46,7 +45,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="${{ env.ENV }}_backend.tfvars"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -54,9 +53,9 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -input=false -var-file="${{ env.ENV }}.tfvars"
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-      run: terraform apply
+      run: terraform apply -auto-approve -input=false -var-file="${{ env.ENV }}.tfvars"
