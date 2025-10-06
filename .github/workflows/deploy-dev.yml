@@ -4,7 +4,6 @@ run-name: "Run_id: ${{ github.run_id }}"
 env:
   TF_CLI_ARGS: "-no-color"
   AWS_REGION: "us-east-1"
-  ENV: "dev"
 
 on:
   push:
@@ -18,7 +17,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: ${{ env.ENV }}
+    environment: dev
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -45,7 +44,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config="${{ env.ENV }}_backend.tfvars"
+      run: terraform init -backend-config="${{ github.env }}_backend.tfvars"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
