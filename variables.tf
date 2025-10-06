@@ -1,15 +1,9 @@
 # AWS config
-# Always pass profile and region via tfvars
-# to avoid deploying resources in wrong region or account
-
-variable "profile" {
-  description = "AWS CLI profile"
-  type        = string
-}
 
 variable "region" {
   description = "AWS region"
   type        = string
+  default     = "us-east-1"
 }
 
 # Tags
