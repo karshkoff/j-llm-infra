@@ -1,16 +1,15 @@
-
 # AWS config
+# Always pass profile and region via tfvars
+# to avoid deploying resources in wrong region or account
 
-variable "aws_profile" {
+variable "profile" {
   description = "AWS CLI profile"
   type        = string
-  default     = "ak"
 }
 
-variable "aws_region" {
+variable "region" {
   description = "AWS region"
   type        = string
-  default     = "us-east-1"
 }
 
 # Tags
@@ -22,7 +21,7 @@ variable "project" {
 }
 
 variable "repo" {
-  description = "GitHub repo url"
+  description = "Project GitHub repo url"
   type        = string
   default     = "https://github.com/karshkoff/j-llm-infra"
 }

@@ -1,6 +1,6 @@
 provider "aws" {
-  region  = var.aws_region
-  profile = var.aws_profile
+  region  = var.region
+  profile = var.profile
 }
 
 resource "aws_s3_bucket" "tf-state-bucket" {
