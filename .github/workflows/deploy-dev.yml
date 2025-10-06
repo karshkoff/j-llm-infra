@@ -1,4 +1,5 @@
-name: 'Terraform'
+name: 'tf deploy-dev'
+run-name: ${{ github.actor }} run on ${{ github.ref }}
 
 env:
   TF_CLI_ARGS: "-no-color -input=false -var-file=dev.tfvars"
