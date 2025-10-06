@@ -1,10 +1,11 @@
-name: 'tf deploy-dev'
-run-name: ${{ github.actor }} run on ${{ github.ref }}
+name: 'tf-deploy-dev'
+run-name: Run ${{ github.run_id }}number
 
 env:
   TF_CLI_ARGS: "-no-color -input=false -var-file=dev.tfvars"
   TF_CLI_ARGS_init: "-backend-config=dev_backend.tfvars"
   TF_CLI_ARGS_apply: "-auto-approve"
+  AWS_REGION: "us-east-1"
 
 on:
   push:
@@ -35,6 +36,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_DEV }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_DEV }}
+        aws-region: ${{ env.AWS_REGION }}
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
