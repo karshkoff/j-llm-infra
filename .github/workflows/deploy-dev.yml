@@ -17,7 +17,7 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    environment: ${{ vars.DEV }}
+    environment: dev
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
@@ -44,7 +44,7 @@ jobs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init -backend-config="${{ vars.DEV }}_backend.tfvars"
+      run: terraform init -backend-config="${{ vars.ENV }}.s3.tfbackend"
 
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -52,9 +52,9 @@ jobs:
 
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan -input=false
+      run: terraform plan -input=false -out=tfplan
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
       if: github.ref == 'refs/heads/"main"' && github.event_name == 'push'
-      run: terraform apply -auto-approve -input=false
+      run: terraform apply -input=false tfplan

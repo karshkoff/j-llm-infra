@@ -1,1 +1,6 @@
-Terraform AWS configs for k8s, networking, monitoring
+## Terraform AWS configs
+
+[] k8s
+[] GPU
+[] network
+[] monitoring
