@@ -2,20 +2,18 @@ provider "aws" {
   region = var.region
 }
 
-resource "aws_s3_bucket" "tf-state-bucket" {
-  bucket = "${var.project}-tf-state-bucket"
+# Backend S3 bucket for Terraform state
 
-  tags = {
-    project = var.project
-    repo    = var.repo
-  }
+module "storage" {
+  source         = "./modules/storage"
+  backend_bucket = "${var.tags.project}-tf-state-bucket"
+  tags           = var.tags
 }
 
-resource "aws_s3_bucket_public_access_block" "tf-state-public-access-block" {
-  bucket = aws_s3_bucket.tf-state-bucket.id
+# VPC for the infrastructure
 
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
+module "network" {
+  source = "./modules/network"
+  tags   = var.tags
 }
+

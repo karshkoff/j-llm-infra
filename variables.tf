@@ -8,15 +8,11 @@ variable "region" {
 
 # Tags
 
-variable "project" {
-  description = "Project name"
-  type        = string
-  default     = "j-llm"
+variable "tags" {
+  description = "A map of tags to assign to all resources"
+  type        = map(string)
+  default = {
+    project = "j-llm"
+    repo    = "https://github.com/karshkoff/j-llm-infra"
+  }
 }
-
-variable "repo" {
-  description = "Project GitHub repo url"
-  type        = string
-  default     = "https://github.com/karshkoff/j-llm-infra"
-}
-
