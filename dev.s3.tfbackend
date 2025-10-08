@@ -1,2 +1,2 @@
-bucket = "j-llm-tf-state-bucket"
+bucket = "j-llm-tf-state-bucket-dev"
 key    = "infra/terraform.tfstate"
