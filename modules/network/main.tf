@@ -77,23 +77,11 @@ resource "aws_eip" "nat_01" {
   tags   = var.tags
 }
 
-resource "aws_eip" "nat_02" {
-  domain = "vpc"
-  tags   = var.tags
-}
-
 resource "aws_nat_gateway" "nat_01" {
   allocation_id = aws_eip.nat_01.id
   subnet_id     = aws_subnet.public_01.id
 
   tags = merge(var.tags, { Name = "${var.tags.project}-nat-az1" })
-}
-
-resource "aws_nat_gateway" "nat_02" {
-  allocation_id = aws_eip.nat_02.id
-  subnet_id     = aws_subnet.public_02.id
-
-  tags = merge(var.tags, { Name = "${var.tags.project}-nat-az2" })
 }
 
 # Public Route Table
@@ -161,20 +149,10 @@ resource "aws_route_table" "private_02" {
 resource "aws_route" "private_02" {
   route_table_id         = aws_route_table.private_02.id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.nat_02.id
+  nat_gateway_id         = aws_nat_gateway.nat_01.id
 }
 
 resource "aws_route_table_association" "private_02" {
   subnet_id      = aws_subnet.private_02.id
   route_table_id = aws_route_table.private_02.id
-}
-
-# Control plane security group
-
-resource "aws_security_group" "eks_cluster_sg" {
-  name        = "eks-cluster-sg"
-  description = "Security group for EKS control plane/workers"
-  vpc_id      = aws_vpc.main.id
-
-  tags = var.tags
 }
