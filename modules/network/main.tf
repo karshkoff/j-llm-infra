@@ -156,3 +156,91 @@ resource "aws_route_table_association" "private_02" {
   subnet_id      = aws_subnet.private_02.id
   route_table_id = aws_route_table.private_02.id
 }
+
+# ALB for EKS Ingress
+
+resource "aws_lb" "main" {
+  name               = "${var.tags.project}-alb"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb_sg.id]
+  subnets            = [aws_subnet.public_01.id, aws_subnet.public_02.id]
+
+  tags = merge(var.tags, { Name = "${var.tags.project}-alb" })
+}
+
+resource "aws_lb_target_group" "main" {
+  name     = "${var.tags.project}-tg"
+  port     = 80
+  protocol = "HTTP"
+  vpc_id   = aws_vpc.main.id
+
+  health_check {
+    path                = "/"
+    protocol            = "HTTP"
+    matcher             = "200-399"
+    interval            = 30
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+  }
+
+  tags = merge(var.tags, { Name = "${var.tags.project}-tg" })
+}
+
+resource "aws_lb_listener" "main" {
+  load_balancer_arn = aws_lb.main.arn
+  port              = "443"
+  protocol          = "HTTPS"
+  ssl_policy        = "ELBSecurityPolicy-2016-08"
+  certificate_arn   = var.self_signed_cert_arn
+
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.main.arn
+  }
+}
+
+# Security Group for ALB
+
+resource "aws_security_group" "alb_sg" {
+  name        = "${var.tags.project}-alb-sg"
+  description = "Security group for eks ingress"
+  vpc_id      = aws_vpc.main.id
+
+  tags = var.tags
+}
+
+resource "aws_vpc_security_group_ingress_rule" "specific_ip_tls_ipv4" {
+  security_group_id = aws_security_group.alb_sg.id
+  cidr_ipv4         = "188.91.152.191/32"
+  from_port         = 443
+  ip_protocol       = "tcp"
+  to_port           = 443
+}
+
+resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
+  security_group_id = aws_security_group.alb_sg.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1" # All protocols
+}
+
+# Route53 Record for ALB
+
+resource "aws_route53_zone" "main" {
+  name = "${var.tags.project}.com"
+
+  tags = var.tags
+}
+
+resource "aws_route53_record" "alb-record" {
+  zone_id = aws_route53_zone.main.zone_id
+  name    = "chat.${var.tags.project}.com"
+  type    = "A"
+
+  alias {
+    name                   = aws_lb.main.dns_name
+    zone_id                = aws_lb.main.zone_id
+    evaluate_target_health = true
+  }
+}
