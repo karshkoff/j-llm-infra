@@ -5,8 +5,9 @@ provider "aws" {
 # VPC for the infrastructure
 
 module "network" {
-  source = "./modules/network"
-  tags   = var.tags
+  source      = "./modules/network"
+  domain_name = "leazardlabs.site"
+  tags        = var.tags
 }
 
 # EKS Cluster
