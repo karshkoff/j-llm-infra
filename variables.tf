@@ -1,4 +1,4 @@
-# AWS config
+# AWS provider config
 
 variable "region" {
   description = "AWS region"
