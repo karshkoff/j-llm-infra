@@ -2,7 +2,7 @@ locals {
   oidc_url = replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")
 }
 
-# Cluster role
+# Cluster IAM role
 
 resource "aws_iam_role" "cluster_role" {
   name = "${var.cluster_name}-eks-cluster-role"
@@ -29,7 +29,7 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
   role       = aws_iam_role.cluster_role.name
 }
 
-# Node role
+# Node IAM role
 
 resource "aws_iam_role" "node_role" {
   name = "${var.cluster_name}-eks-node-group"

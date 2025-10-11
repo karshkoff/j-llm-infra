@@ -21,6 +21,7 @@ module "network" {
 module "eks" {
   source             = "./modules/eks"
   cluster_name       = var.tags.project
+  vpc_id             = module.network.vpc_id
   private_subnet_ids = module.network.private_subnet_ids
   aws_account_id     = local.aws_account_id
   tags               = var.tags

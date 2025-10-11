@@ -1,4 +1,4 @@
-# Cluster
+# EKS cluster
 
 resource "aws_eks_cluster" "main" {
   name    = var.cluster_name

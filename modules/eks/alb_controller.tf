@@ -27,10 +27,6 @@ data "aws_eks_cluster_auth" "main" {
 
 resource "kubernetes_service_account" "alb" {
   metadata {
-    labels = {
-      "app.kubernetes.io/component" = "controller",
-      "app.kubernetes.io/name"      = "aws-load-balancer-controller"
-    }
     name      = "aws-load-balancer-controller"
     namespace = "kube-system"
     annotations = {
@@ -48,6 +44,8 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   version    = "1.13.0"
 
+  timeout = 60
+
   set = [
     {
       name  = "clusterName"
@@ -60,6 +58,10 @@ resource "helm_release" "aws_load_balancer_controller" {
     {
       name  = "serviceAccount.name"
       value = var.alb_controller_role_name
-    }
+    },
+    {
+      name  = "vpcId"
+      value = var.vpc_id
+    },
   ]
 }
