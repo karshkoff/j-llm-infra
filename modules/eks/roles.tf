@@ -1,5 +1,5 @@
 locals {
-  oidc_id = replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")
+  oidc_url = replace(aws_eks_cluster.main.identity[0].oidc[0].issuer, "https://", "")
 }
 
 # Cluster role
@@ -63,23 +63,23 @@ resource "aws_iam_role_policy_attachment" "node-AmazonEC2ContainerRegistryReadOn
   role       = aws_iam_role.node_role.name
 }
 
-# ALB Ingress Controller IAM role
+# ALB controller IAM role
 
 resource "aws_iam_role" "alb_controller_role" {
-  name = "${var.cluster_name}-alb-ingress-controller-role"
+  name = var.alb_controller_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
       Effect = "Allow"
       Principal = {
-        Federated = "arn:aws:iam::${var.aws_account_id}:oidc-provider/oidc.eks.region-code.amazonaws.com/id/${local.oidc_id}"
+        Federated = "arn:aws:iam::${var.aws_account_id}:oidc-provider/${local.oidc_url}"
       }
       Action = "sts:AssumeRoleWithWebIdentity"
       Condition = {
         StringEquals = {
-          "oidc.eks.region-code.amazonaws.com/id/${local.oidc_id}:aud" = "sts.amazonaws.com"
-          "oidc.eks.region-code.amazonaws.com/id/${local.oidc_id}:sub" = "system:serviceaccount:kube-system:${var.alb_load_balancer_role_name}"
+          "${local.oidc_url}:aud" = "sts.amazonaws.com"
+          "${local.oidc_url}:sub" = "system:serviceaccount:kube-system:${var.alb_controller_role_name}"
         }
       }
     }]

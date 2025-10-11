@@ -8,13 +8,19 @@ variable "cluster_name" {
   type        = string
 }
 
+variable "cluster_version" {
+  description = "The Kubernetes version for the EKS cluster"
+  type        = string
+  default     = "1.33"
+}
+
 variable "private_subnet_ids" {
   description = "A list of private subnet IDs"
   type        = list(string)
 }
 
-variable "alb_load_balancer_role_name" {
-  description = "The name of the ALB Load Balancer Controller"
+variable "alb_controller_role_name" {
+  description = "The name of the ALB Controller"
   type        = string
   default     = "aws-load-balancer-controller"
 }
