@@ -8,3 +8,8 @@ output "private_subnet_ids" {
   description = "The IDs of the private subnets"
   value       = [aws_subnet.private_01.id, aws_subnet.private_02.id]
 }
+
+output "alb_target_group_arn" {
+  description = "The ARN of the ALB target group"
+  value       = aws_lb_target_group.main.arn
+}

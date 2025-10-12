@@ -37,8 +37,6 @@ resource "helm_release" "aws_load_balancer_controller" {
   namespace  = "kube-system"
   version    = "1.13.0"
 
-  timeout = 60
-
   set = [
     {
       name  = "clusterName"

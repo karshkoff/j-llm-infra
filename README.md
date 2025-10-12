@@ -22,3 +22,9 @@
 5. `terraform apply`
 6. `terraform destroy` after using, to reduce costs
 
+
+## Log in EKS
+1. `aws eks update-kubeconfig --name j-llm --region ${AWS_REGION} --profile ${AWS_PROFILE} --alias j-llm`
+2. `kubectl config use-context j-llm`
+3. `kubectl get nodes`
+

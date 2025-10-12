@@ -51,7 +51,7 @@ resource "aws_lb_listener" "https" {
 
 resource "aws_security_group" "alb_sg" {
   name        = "${var.tags.project}-alb-sg"
-  description = "Security group for eks ingress"
+  description = "ALB security group"
   vpc_id      = aws_vpc.main.id
 
   tags = var.tags
