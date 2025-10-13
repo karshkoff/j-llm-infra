@@ -1,9 +1,3 @@
-# provider "kubernetes" {
-#   host                   = local.host
-#   cluster_ca_certificate = local.cluster_ca_certificate
-#   token                  = local.token
-# }
-
 provider "helm" {
   kubernetes = {
     host                   = aws_eks_cluster.main.endpoint
@@ -15,18 +9,6 @@ provider "helm" {
 data "aws_eks_cluster_auth" "main" {
   name = var.cluster_name
 }
-
-# # ALB controller service account
-
-# resource "kubernetes_service_account" "alb" {
-#   metadata {
-#     name      = "aws-load-balancer-controller"
-#     namespace = "kube-system"
-#     annotations = {
-#       "eks.amazonaws.com/role-arn" = "arn:aws:iam::${var.aws_account_id}:role/${var.alb_controller_role_name}"
-#     }
-#   }
-# }
 
 # ALB controller
 

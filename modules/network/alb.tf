@@ -87,20 +87,6 @@ resource "aws_vpc_security_group_egress_rule" "allow_all_traffic_ipv4" {
 #   description                  = "Traffic from ALB to EKS nodes"
 # }
 
-# # Attach EKS nodes to the target group
-
-# data "aws_instances" "eks_nodes" {
-#   instance_tags = {
-#     "eks:nodegroup-name" = "${var.tags.project}-eks-cluster-node-group"
-#   }
-# }
-
-# resource "aws_lb_target_group_attachment" "eks_nodes" {
-#   for_each         = toset(data.aws_instances.eks_nodes.ids)
-#   target_group_arn = aws_lb_target_group.main.arn
-#   target_id        = each.value
-#   port             = 30080
-# }
 
 data "aws_route53_zone" "main" {
   name         = var.domain_name
