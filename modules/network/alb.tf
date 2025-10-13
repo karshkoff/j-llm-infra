@@ -4,7 +4,6 @@ resource "aws_lb" "main" {
   name               = "${var.tags.project}-alb"
   internal           = false
   load_balancer_type = "application"
-  security_groups    = [aws_security_group.alb_sg.id]
   subnets            = [aws_subnet.public_01.id, aws_subnet.public_02.id]
 
   tags = merge(var.tags,
