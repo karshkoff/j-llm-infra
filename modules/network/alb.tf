@@ -109,7 +109,7 @@ data "aws_route53_zone" "main" {
 
 resource "aws_route53_record" "alb-record" {
   zone_id = data.aws_route53_zone.main.zone_id
-  name    = "llm.${var.domain_name}"
+  name    = "chat.${var.domain_name}"
   type    = "A"
 
   alias {
