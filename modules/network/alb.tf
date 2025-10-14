@@ -24,9 +24,10 @@ data "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "alb-record" {
-  zone_id = data.aws_route53_zone.main.zone_id
-  name    = "chat.${var.domain_name}"
-  type    = "A"
+  for_each = toset(["chat", "grafana"])
+  zone_id  = data.aws_route53_zone.main.zone_id
+  name     = "${each.key}.${var.domain_name}"
+  type     = "A"
 
   alias {
     name                   = aws_lb.main.dns_name
