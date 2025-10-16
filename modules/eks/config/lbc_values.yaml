@@ -1,0 +1,6 @@
+clusterName: ${cluster_name}
+serviceAccount.name: ${alb_controller_role_name}
+vpcId: ${vpc_id}
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::${aws_account_id}:role/${alb_controller_role_name}

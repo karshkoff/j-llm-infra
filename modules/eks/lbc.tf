@@ -17,24 +17,15 @@ resource "helm_release" "aws_load_balancer_controller" {
   repository = "https://aws.github.io/eks-charts"
   chart      = "aws-load-balancer-controller"
   namespace  = "kube-system"
-  version    = "1.13.0"
-
-  set = [
-    {
-      name  = "clusterName"
-      value = var.cluster_name
-    },
-    {
-      name  = "serviceAccount.name"
-      value = var.alb_controller_role_name
-    },
-    {
-      name  = "vpcId"
-      value = var.vpc_id
-    },
-    {
-      name  = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
-      value = "arn:aws:iam::${var.aws_account_id}:role/${var.alb_controller_role_name}"
-    },
+  version    = "1.14.0"
+  values = [
+    templatefile("${path.module}/config/lbc_values.yaml",
+      {
+        cluster_name             = var.cluster_name
+        alb_controller_role_name = var.alb_controller_role_name
+        vpc_id                   = var.vpc_id
+        aws_account_id           = var.aws_account_id
+      }
+    )
   ]
 }
