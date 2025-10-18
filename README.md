@@ -2,25 +2,19 @@
 
 ![alt text](docs/image.png)
 
-## TODO:
-
-- [x] k8s (node group)
-- [] GPU (g5g.xlarge, spot)
-- [] network (Ingress, AWS ALB)
-- [] monitoring (Prometheus, Grafana or AWS CloudWatch)
-
 ## To run locally:
 1. Set AWS account env vars:
 
-    `export AWS_PROFILE=` or set [AWS credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html)
+   `export AWS_PROFILE=` or set [AWS credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html)
 
-    `export AWS_REGION=`
+   `export AWS_REGION=`
 
 2. `git clone https://github.com/karshkoff/j-llm-infra.git`
 3. `cd j-lmm-infra`
 4. `terraform init -backend-config=dev.s3.tfbackend`
 5. `terraform apply`
-6. `terraform destroy` after using, to reduce costs
+6. `kubectl delete -f ollama/ollama-ingress.yaml`
+7. `terraform destroy` after using, to reduce costs
 
 
 ## Log in EKS

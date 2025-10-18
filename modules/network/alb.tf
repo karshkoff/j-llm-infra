@@ -10,7 +10,7 @@ resource "aws_lb" "main" {
     {
       Name                       = "${var.tags.project}-alb",
       "elbv2.k8s.aws/cluster"    = var.tags.project,
-      "ingress.k8s.aws/stack"    = "${var.tags.project}/${var.tags.project}-ingress",
+      "ingress.k8s.aws/stack"    = "ollama/${var.tags.project}-ingress",
       "ingress.k8s.aws/resource" = "LoadBalancer",
     }
   )
@@ -24,7 +24,7 @@ data "aws_route53_zone" "main" {
 }
 
 resource "aws_route53_record" "alb-record" {
-  for_each = toset(["chat", "grafana"])
+  for_each = toset(["ollama", "grafana"])
   zone_id  = data.aws_route53_zone.main.zone_id
   name     = "${each.key}.${var.domain_name}"
   type     = "A"
