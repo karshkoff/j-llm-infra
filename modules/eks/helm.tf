@@ -49,5 +49,8 @@ resource "helm_release" "kube_prometheus_stack" {
     )
   ]
 
-  depends_on = [aws_eks_cluster.main]
+  depends_on = [
+    aws_eks_cluster.main,
+    helm_release.aws_load_balancer_controller
+  ]
 }

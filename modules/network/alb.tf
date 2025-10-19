@@ -10,7 +10,7 @@ resource "aws_lb" "main" {
     {
       Name                       = "${var.tags.project}-alb",
       "elbv2.k8s.aws/cluster"    = var.tags.project,
-      "ingress.k8s.aws/stack"    = "ollama/${var.tags.project}-ingress",
+      "ingress.k8s.aws/stack"    = "${var.tags.project}-group",
       "ingress.k8s.aws/resource" = "LoadBalancer",
     }
   )
