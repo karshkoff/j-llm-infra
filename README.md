@@ -1,7 +1,5 @@
 # This repository holds Terraform configs for AWS infrastucture
 
-![alt text](docs/image.png)
-
 ## Pre-requisites:
 
 - One GPU node: G5 NVIDIA A10G (Time-sclicing)

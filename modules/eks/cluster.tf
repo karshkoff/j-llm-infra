@@ -68,7 +68,6 @@ resource "aws_eks_node_group" "gpu" {
 
   capacity_type  = "SPOT"
   instance_types = ["g4dn.xlarge"]
-  ami_type       = "AL2023_x86_64_NVIDIA"
 
   labels = {
     "nvidia.com/gpu" = "true"
