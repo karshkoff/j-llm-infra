@@ -2,6 +2,10 @@
 
 ![alt text](docs/image.png)
 
+## Pre-requisites:
+
+- One GPU node: G5 NVIDIA A10G (Time-sclicing)
+
 ## To run locally:
 1. Set AWS account env vars:
 

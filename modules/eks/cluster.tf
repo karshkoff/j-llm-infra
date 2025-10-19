@@ -22,7 +22,7 @@ resource "aws_eks_cluster" "main" {
   tags = var.tags
 }
 
-# Node Group
+# Node Group, default
 
 resource "aws_eks_node_group" "main" {
   node_group_name = "${var.cluster_name}-node-group"
@@ -36,9 +36,49 @@ resource "aws_eks_node_group" "main" {
     min_size     = 1
   }
 
-  capacity_type = "SPOT"
-  # instance_types = ["g5g.xlarge"]
+  capacity_type  = "SPOT"
   instance_types = ["t3.small"]
+
+  update_config {
+    max_unavailable = 1
+  }
+
+  depends_on = [
+    aws_iam_role_policy_attachment.node-AmazonEKSWorkerNodePolicy,
+    aws_iam_role_policy_attachment.node-AmazonEKS_CNI_Policy,
+    aws_iam_role_policy_attachment.node-AmazonEC2ContainerRegistryReadOnly,
+  ]
+
+  tags = var.tags
+}
+
+# Node Group, GPU
+
+resource "aws_eks_node_group" "gpu" {
+  node_group_name = "${var.cluster_name}-gpu-node-group"
+  cluster_name    = aws_eks_cluster.main.name
+  node_role_arn   = aws_iam_role.node_role.arn
+  subnet_ids      = var.private_subnet_ids
+
+  scaling_config {
+    desired_size = 1
+    max_size     = 1
+    min_size     = 1
+  }
+
+  capacity_type  = "SPOT"
+  instance_types = ["g5.xlarge"]
+  ami_type       = "AL2023_X86_64_NVIDIA"
+
+  labels = {
+    "nvidia.com/gpu" = "true"
+  }
+
+  taint {
+    key    = "nvidia.com/gpu"
+    value  = "true"
+    effect = "NO_SCHEDULE"
+  }
 
   update_config {
     max_unavailable = 1

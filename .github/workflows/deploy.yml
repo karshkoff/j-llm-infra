@@ -1,4 +1,4 @@
-name: 'tf-deploy-dev'
+name: 'tf-deploy'
 run-name: "Run_id: ${{ github.run_id }}"
 
 env:
