@@ -50,10 +50,6 @@ jobs:
     - name: Terraform Format
       run: terraform fmt -check
 
-    # Generates an execution plan for Terraform
-    - name: Terraform Plan
-      run: terraform plan -input=false -out=tfplan
-
       # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
-      run: terraform apply -input=false tfplan
+      run: terraform apply
