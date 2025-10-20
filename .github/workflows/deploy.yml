@@ -52,4 +52,4 @@ jobs:
 
       # On push to "main", build or change infrastructure according to Terraform configuration files
     - name: Terraform Apply
-      run: terraform apply
+      run: terraform apply -auto-approve
