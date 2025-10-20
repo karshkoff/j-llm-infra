@@ -36,7 +36,8 @@ resource "aws_eks_node_group" "main" {
     min_size     = 1
   }
 
-  instance_types = ["t3.small"]
+  capacity_type  = "SPOT"
+  instance_types = ["t3.large"]
 
   update_config {
     max_unavailable = 1
@@ -51,41 +52,44 @@ resource "aws_eks_node_group" "main" {
   tags = var.tags
 }
 
-# Node Group, GPU
+# # Wating for AWS quota increase for GPU instances
+# # Node Group, GPU
 
-resource "aws_eks_node_group" "gpu" {
-  node_group_name = "${var.cluster_name}-gpu-node-group"
-  cluster_name    = aws_eks_cluster.main.name
-  node_role_arn   = aws_iam_role.node_role.arn
-  subnet_ids      = var.private_subnet_ids
+# resource "aws_eks_node_group" "gpu" {
+#   node_group_name = "${var.cluster_name}-gpu-node-group"
+#   cluster_name    = aws_eks_cluster.main.name
+#   node_role_arn   = aws_iam_role.node_role.arn
+#   subnet_ids      = var.private_subnet_ids
 
-  scaling_config {
-    desired_size = 1
-    max_size     = 1
-    min_size     = 1
-  }
+#   scaling_config {
+#     desired_size = 1
+#     max_size     = 1
+#     min_size     = 1
+#   }
 
-  instance_types = ["g4dn.xlarge"]
+#   capacity_type = "SPOT"
+#   instance_types = ["g4dn.xlarge"]
+#   ami_type = "AL2_x86_64_GPU"
 
-  labels = {
-    "nvidia.com/gpu" = "true"
-  }
+#   labels = {
+#     "nvidia.com/gpu" = "true"
+#   }
 
-  taint {
-    key    = "nvidia.com/gpu"
-    value  = "true"
-    effect = "NO_SCHEDULE"
-  }
+#   taint {
+#     key    = "nvidia.com/gpu"
+#     value  = "true"
+#     effect = "NO_SCHEDULE"
+#   }
 
-  update_config {
-    max_unavailable = 1
-  }
+#   update_config {
+#     max_unavailable = 1
+#   }
 
-  depends_on = [
-    aws_iam_role_policy_attachment.node-AmazonEKSWorkerNodePolicy,
-    aws_iam_role_policy_attachment.node-AmazonEKS_CNI_Policy,
-    aws_iam_role_policy_attachment.node-AmazonEC2ContainerRegistryReadOnly,
-  ]
+#   depends_on = [
+#     aws_iam_role_policy_attachment.node-AmazonEKSWorkerNodePolicy,
+#     aws_iam_role_policy_attachment.node-AmazonEKS_CNI_Policy,
+#     aws_iam_role_policy_attachment.node-AmazonEC2ContainerRegistryReadOnly,
+#   ]
 
-  tags = var.tags
-}
+#   tags = var.tags
+# }
