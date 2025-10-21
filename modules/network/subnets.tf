@@ -3,11 +3,11 @@
 resource "aws_subnet" "public_01" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.101.0/24"
-  availability_zone       = "us-east-1a"
+  availability_zone       = "${var.region}a"
   map_public_ip_on_launch = true
 
   tags = merge(var.tags, {
-    Name                                        = "us-east-1a-public-01"
+    Name                                        = "${var.region}a-public-01"
     "kubernetes.io/role/elb"                    = "1"
     "kubernetes.io/cluster/${var.tags.project}" = "shared"
   })
@@ -16,11 +16,11 @@ resource "aws_subnet" "public_01" {
 resource "aws_subnet" "public_02" {
   vpc_id                  = aws_vpc.main.id
   cidr_block              = "10.0.102.0/24"
-  availability_zone       = "us-east-1b"
+  availability_zone       = "${var.region}b"
   map_public_ip_on_launch = true
 
   tags = merge(var.tags, {
-    Name                                        = "us-east-1b-public-02"
+    Name                                        = "${var.region}b-public-02"
     "kubernetes.io/role/elb"                    = "1"
     "kubernetes.io/cluster/${var.tags.project}" = "shared"
   })
@@ -58,10 +58,10 @@ resource "aws_route_table_association" "public_02" {
 resource "aws_subnet" "private_01" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "${var.region}a"
 
   tags = merge(var.tags, {
-    Name                                        = "us-east-1a-private-01"
+    Name                                        = "${var.region}a-private-01"
     "kubernetes.io/role/internal-elb"           = "1"
     "kubernetes.io/cluster/${var.tags.project}" = "shared"
   })
@@ -70,10 +70,10 @@ resource "aws_subnet" "private_01" {
 resource "aws_subnet" "private_02" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "${var.region}b"
 
   tags = merge(var.tags, {
-    Name                                        = "us-east-1b-private-02"
+    Name                                        = "${var.region}b-private-02"
     "kubernetes.io/role/internal-elb"           = "1"
     "kubernetes.io/cluster/${var.tags.project}" = "shared"
   })

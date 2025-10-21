@@ -4,6 +4,11 @@ variable "domain_name" {
   default     = ""
 }
 
+variable "region" {
+  description = "The AWS region to deploy resources"
+  type        = string
+}
+
 variable "tags" {
   description = "A map of tags to assign to all resources"
   type        = map(string)

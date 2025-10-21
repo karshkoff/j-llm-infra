@@ -13,6 +13,7 @@ locals {
 module "network" {
   source      = "./modules/network"
   domain_name = "leazardlabs.site"
+  region      = var.region
   tags        = var.tags
 }
 
