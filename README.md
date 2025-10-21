@@ -2,19 +2,20 @@
 
 ## To run locally:
 1. Set AWS account env vars
-set [AWS credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html)
+, [AWS credentials](https://docs.aws.amazon.com/cli/v1/userguide/cli-configure-files.html)
 ```
-export AWS_REGION=
-export AWS_PROFILE=
+export AWS_REGION=us-east-1
+export AWS_PROFILE=ak-dev
 ```
 
 2. Clone repo and deploy infra
 ```
 git clone https://github.com/karshkoff/j-llm-infra.git
 cd j-lmm-infra
+```
+```
 terraform init -backend-config=dev.s3.tfbackend
 terraform apply
-kubectl delete -f ollama/ollama-ingress.yaml
 ```
 
 3. Destroy infra
